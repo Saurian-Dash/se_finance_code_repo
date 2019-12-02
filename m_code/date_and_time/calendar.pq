@@ -1,5 +1,8 @@
 // d_calendar table
-let
+
+// Generates a calendar table from the date passed into the StartDate
+// variable on line 9 until today's date.
+
     Source = List.Dates(StartDate, Length, #duration(1, 0, 0, 0)),
     #"Converted to Table" = Table.FromList(Source, Splitter.SplitByNothing(), null, null, ExtraValues.Error),
     #"Renamed Columns" = Table.RenameColumns(#"Converted to Table",{{"Column1", "date"}}),

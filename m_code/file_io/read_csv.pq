@@ -10,21 +10,22 @@
 
 let
     full_path = file_path & file_name,
+
     source = Csv.Document(
                         File.Contents(full_path),
                         [Delimiter=delimiter, 
                         Columns=columns, 
                         Encoding=encoding, 
                         QuoteStyle=QuoteStyle.Csv]),
-                        
+
     remove_blank_rows = Table.SelectRows(source,
                                         each not List.IsEmpty(
                                             List.RemoveMatchingItems(
                                                 Record.FieldValues(_),
                                                 {"", null}))),
+
     promote_headers = Table.PromoteHeaders(
                                         remove_blank_rows, 
                                         [PromoteAllScalars=true])
 in
     promote_headers
-    
