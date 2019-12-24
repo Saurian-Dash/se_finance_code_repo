@@ -1,15 +1,16 @@
-// this function will return a text representation of the value present in
-// any named range present in the current Excel workbook.
+// This function will return a text representation of the value present in
+// any named range present in the current Excel workbook. If the named
+// range does not exist, then an Error record will be returned.
 
-// ARGS ::
-// named_range | type: text
+// Args:
+// named_range (text): The name of the Excel named range in text format.
 
-// USAGE EXAMPLE ::
+// Usage Example:
 // import_path = get_parameter("import_path")
 
-// TIPS ::
-// when your named_range contains a date, you can parse it using one
-// of Power Query's built in Date conversion functions:
+// Tips:
+// If your named_range contains a date, you can parse it using one of Power
+// Power Query's built in Date conversion functions:
 // import_date = Date.FromText(get_parameter("import_date"))
 
 
@@ -17,6 +18,5 @@
 let
     parameter =
         try Excel.CurrentWorkbook(){[Name=named_range]}[Content]{0}[Column1]
-        otherwise "Error: Named range does not exist"
 in
-    parameter
+    if parameter[HasError] then parameter[Error] else parameter[Value]

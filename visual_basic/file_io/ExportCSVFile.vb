@@ -1,20 +1,13 @@
 Option Explicit
+
     Dim FSO As Object
     Dim fName As String
     Dim fPath As String
     Dim fYear As String
     Dim tabName As String
-    Dim testRange As Range
 
 
-Sub refreshQueries()
-
-    ActiveWorkbook.RefreshAll
-    
-End Sub
-
-
-Sub exportCSV()
+Sub ExportCSV()
 
 '    Assign module level variables
     fName = "historical__component_booking_base"
@@ -58,27 +51,6 @@ errHandler:
     MsgBox "Error: " & Err.Number & " " & Err.Description
 
 End Sub
-
-Function exportFile(sheetName)
-
-    Dim dateStart As String
-    Dim dateEnd As String
-
-    sheetName.Activate
-    tabName = ActiveSheet.Name
-    dateStart = Format(fYear & "-" & tabName, "yyyy-mm-dd")
-    dateEnd = Format(CDate(WorksheetFunction.EoMonth(dateStart, 0)), "yyyy-mm-dd")
-    
-    Range("A1").CurrentRegion.Copy
-    Workbooks.Add
-    Range("A1").PasteSpecial (xlPasteValuesAndNumberFormats)
-    ActiveWorkbook.SaveAs Filename:=fPath & fName & " " & dateStart & "_" & dateEnd & ".csv", _
-    FileFormat:=xlCSV, CreateBackup:=False, Local:=True
-    
-    Application.CutCopyMode = False
-    ActiveWorkbook.Close
-
-End Function
 
 
 Function ExportCSVFile(sheetName)
