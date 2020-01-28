@@ -9,9 +9,9 @@
 // import_path = get_parameter("import_path")
 
 // Tips:
-// If your named_range contains a date, you can parse it using one of Power
-// Power Query's built in Date conversion functions:
-// import_date = Date.FromText(get_parameter("import_date"))
+// If your named_range contains a date, parse it using one of Power Query's
+// built in Date conversion functions, otherwise it will be read as text:
+// import_date = Date.From(get_parameter("import_date"))
 
 
 (named_range as text) =>

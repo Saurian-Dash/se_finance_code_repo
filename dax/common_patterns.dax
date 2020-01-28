@@ -1,0 +1,100 @@
+// BASIC PATTERNS
+
+// SUM of column
+sum_column = CALCULATE( SUM( table[column] ) )
+
+// Count of column
+count_column = CALCULATE( COUNT( table[column] ) )
+
+// Count values in column
+countval_column = CALCULATE( COUNTA( table[column] ) )
+
+// Average of column
+avg_column = CALCULATE( AVERAGE( table[column] ) )
+
+// Minimum of column
+min_column = CALCULATE( MIN( table[column] ) )
+
+// Maximum of column
+max_column = CALCULATE( MAX( table[column] ) )
+
+// Divide columns
+// Args: Numerator, Denominator, Alternative Result (to catch division errors)
+divide_columns =
+CALCULATE(
+    DIVIDE( table[column], table[column], 0 )
+)
+
+
+// CUMULATIVE PATTERNS
+
+// NOTE: You do not need to redefine calculations if you need to reuse them.
+// These CUMULATIVE measures all reference the measures we've already defined.
+cumulative = 
+CALCULATE (
+    [measure],
+    FILTER (
+        ALL ( d_calendar[d_date] ),
+        d_calendar[d_date] <= MAX ( d_calendar[d_date] )
+    )
+)
+
+// Cumulative sum of column
+cume_sum = 
+CALCULATE (
+    [sum_column],
+    FILTER (
+        ALL ( d_calendar[d_date] ),
+        d_calendar[d_date] <= MAX ( d_calendar[d_date] )
+    )
+)
+
+// Cumulative count of column
+cume_count = 
+CALCULATE (
+    [count_column],
+    FILTER (
+        ALL ( d_calendar[d_date] ),
+        d_calendar[d_date] <= MAX ( d_calendar[d_date] )
+    )
+)
+
+
+// YEAR OVER YEAR PATTERNS
+
+// NOTE: You do not need to redefine calculations if you need to reuse them.
+// These YOY measures all reference the measures we've already defined.
+yoy = 
+CALCULATE(
+    [measure],
+    SAMEPERIODLASTYEAR(d_calendar[d_date])
+)
+
+// NOTE: To compare the same day from last year, simply subtract a day with
+// the DATEADD function. The following measures will compare the same day
+
+// YoY sum of column
+yoy_sum = 
+CALCULATE(
+    [sum_column],
+    SAMEPERIODLASTYEAR(
+        DATEADD(d_calendar[d_date], -1, DAY)
+    )
+)
+
+// YoY count of column
+yoy_count = 
+CALCULATE(
+    [count_column],
+    SAMEPERIODLASTYEAR(
+        DATEADD(d_calendar[d_date], -1, DAY)
+    )
+)
+
+
+// TIME INTELLIGENCE PATTERNS
+
+// Start of week date
+start_of_week_date = d_calendar[d_date]  - WEEKDAY( d_calendar[d_date], 2 ) +1
+end_of_week_date = d_calendar[d_date] + 7 - WEEKDAY( d_calendar[d_date], 2 )
+

@@ -1,0 +1,9 @@
+JOIN__BOOKING_CREDIT_AMOUNT:=CALCULATE( 
+	[SUM__BOOKINGS_CREDIT_AMOUNT],
+	FILTER( 
+		z_customer_purchases,
+		CALCULATE(
+			COUNTROWS( z_cms_booking_payment_amount )
+			) > 0
+		)
+	)
