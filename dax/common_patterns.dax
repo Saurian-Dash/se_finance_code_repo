@@ -34,8 +34,8 @@ cumulative =
 CALCULATE (
     [measure],
     FILTER (
-        ALL ( d_calendar[d_date] ),
-        d_calendar[d_date] <= MAX ( d_calendar[d_date] )
+        ALL ( dim_date[Date] ),
+        dim_date[Date] <= MAX ( dim_date[Date] )
     )
 )
 
@@ -44,8 +44,8 @@ cume_sum =
 CALCULATE (
     [sum_column],
     FILTER (
-        ALL ( d_calendar[d_date] ),
-        d_calendar[d_date] <= MAX ( d_calendar[d_date] )
+        ALL ( dim_date[Date] ),
+        dim_date[Date] <= MAX ( dim_date[Date] )
     )
 )
 
@@ -54,8 +54,8 @@ cume_count =
 CALCULATE (
     [count_column],
     FILTER (
-        ALL ( d_calendar[d_date] ),
-        d_calendar[d_date] <= MAX ( d_calendar[d_date] )
+        ALL ( dim_date[Date] ),
+        dim_date[Date] <= MAX ( dim_date[Date] )
     )
 )
 
@@ -67,7 +67,7 @@ CALCULATE (
 yoy = 
 CALCULATE(
     [measure],
-    SAMEPERIODLASTYEAR(d_calendar[d_date])
+    SAMEPERIODLASTYEAR(dim_date[Date])
 )
 
 // NOTE: To compare the same day from last year, simply subtract a day with
@@ -78,7 +78,7 @@ yoy_sum =
 CALCULATE(
     [sum_column],
     SAMEPERIODLASTYEAR(
-        DATEADD(d_calendar[d_date], -1, DAY)
+        DATEADD(dim_date[Date], -1, DAY)
     )
 )
 
@@ -87,14 +87,72 @@ yoy_count =
 CALCULATE(
     [count_column],
     SAMEPERIODLASTYEAR(
-        DATEADD(d_calendar[d_date], -1, DAY)
+        DATEADD(dim_date[Date], -1, DAY)
     )
 )
 
 
 // TIME INTELLIGENCE PATTERNS
 
+// DATEADD
+add_a_day_to_date =
+DATEADD( dim_date[Date], 1, DAY)
+
+subtract_a_month_from_date =
+DATEADD( dim_date[Date], -1, MONTH)
+
+subtract_two_years_from_date =
+DATEADD( dim_date[Date], -2, YEAR)
+
+
+previous_year_figures =
+CALCULATE(
+    [measure],
+    DATEADD( dim_date[Date], -1, YEAR )
+)
+
+previous_month_figures =
+CALCULATE(
+    [measure],
+    DATEADD( dim_date[Date], -1, MONTH )
+)
+
+previous_day_figures =
+CALCULATE(
+    [measure],
+    DATEADD( dim_date[Date], -1, DAY )
+)
+
 // Start of week date
-start_of_week_date = d_calendar[d_date]  - WEEKDAY( d_calendar[d_date], 2 ) +1
-end_of_week_date = d_calendar[d_date] + 7 - WEEKDAY( d_calendar[d_date], 2 )
+start_of_week_date = dim_date[Date]  - WEEKDAY( dim_date[Date], 2 ) +1
+end_of_week_date = dim_date[Date] + 7 - WEEKDAY( dim_date[Date], 2 )
+
+
+// FPA CALCULATIONS
+
+// Use `VAR` to declare variables
+Margin % difference from Forecasted Margin = 
+VAR __BASELINE_VALUE = SUM('fact_forecast'[Forecasted Margin])
+VAR __VALUE_TO_COMPARE = SUM('fact_bookings'[Margin])
+RETURN
+	IF(
+		NOT ISBLANK(__VALUE_TO_COMPARE),
+		DIVIDE(__VALUE_TO_COMPARE - __BASELINE_VALUE, __BASELINE_VALUE)
+	)
+
+
+Revenue % difference from Forecasted Revenue = 
+VAR __BASELINE_VALUE = SUM('fact_forecast'[Forecasted Revenue])
+VAR __VALUE_TO_COMPARE = SUM('fact_bookings'[Revenue])
+RETURN
+	IF(
+		NOT ISBLANK(__VALUE_TO_COMPARE),
+		DIVIDE(__VALUE_TO_COMPARE - __BASELINE_VALUE, __BASELINE_VALUE)
+	)
+
+
+Content	Name	Extension	Date accessed	Date modified	Date created	Attributes	Folder Path	pnr
+
+
+
 

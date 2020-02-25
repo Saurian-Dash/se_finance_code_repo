@@ -1,0 +1,28 @@
+-- ACCOUNTING_PERIODS dimension table
+SELECT *
+FROM ACCOUNTING_PERIODS;
+
+
+-- ACCOUNTS dimension table
+SELECT *
+FROM ACCOUNTS;
+
+
+-- CURRENCIES dimension table
+SELECT *
+FROM CURRENCIES;
+
+
+-- ENTITY dimension table
+SELECT *
+FROM ENTITY;
+
+
+-- LOCATIONS dimension table
+SELECT *
+FROM LOCATIONS;
+
+
+-- SUBSIDIARIES dimension table
+SELECT *
+FROM SUBSIDIARIES;
